@@ -20,6 +20,37 @@ A minimal Python package to convert Markdown files to clean, responsive **HTML**
 
 ---
 
+## Install Dependencies
+
+#### 🛠️ For **Debian/Ubuntu**:
+
+```bash
+sudo apt update
+sudo apt install -y \
+    libavif13 \
+    libgstreamer-plugins-base1.0-0 \
+    gstreamer1.0-plugins-base \
+    gstreamer1.0-plugins-good \
+    gstreamer1.0-libav \
+    libgstreamer-gl1.0-0 \
+    libgstreamer-plugins-bad1.0-0 \
+    libgstreamer-plugins-base1.0-dev
+```
+
+---
+
+#### 🛠️ For **CentOS/RHEL/Fedora**:
+
+```bash
+sudo dnf install -y \
+    gstreamer1-plugins-base \
+    gstreamer1-plugins-good \
+    gstreamer1-plugins-bad-free \
+    gstreamer1-libav \
+    libavif
+```
+
+
 ## 📦 Installation
 
 ```bash

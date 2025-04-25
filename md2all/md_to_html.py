@@ -5,6 +5,7 @@ import re
 from pathlib import Path
 from bs4 import BeautifulSoup
 
+from md2all.utils import html_to_pdf_with_playwright, ensure_playwright_installed
 ROOT_DIR = Path(__file__).resolve().parent
 home_dir = os.path.expanduser("~")
 lib_dir = os.path.join(home_dir, ".lib")
@@ -83,26 +84,49 @@ def read_markdown_file(file_path):
     """Read the content of a markdown file."""
     with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
         return f.read()
+    
 
-def convert_markdown(md_path, output_dir="", output_format="pdf"):
+def convert_markdown(md_path, output_dir="", output_format="html", use_cdn=False):
     """Convert Markdown to HTML (optionally PDF), save results in appropriate location."""
+
+    if not md_path:
+        raise ValueError("Markdown file path cannot be empty. Please provide a valid .md file path.")
+
     # get full path if not absolute
     if not os.path.isabs(md_path):
         md_path = os.path.abspath(md_path)
+    
     markdown_text = read_markdown_file(md_path)
     markdown_text = convert_latex_format(markdown_text)
 
     # Prepare file names and paths
     base_name = os.path.basename(md_path).replace(".md", "")
     temp_html_path = os.path.join("/tmp", f"{base_name}.html")
-    final_output_path = os.path.join(output_dir, f"{base_name}.{output_format}") if output_dir else md_path.replace(".md", f".{output_format}")
 
+    if output_dir == "":
+        output_dir = os.path.dirname(md_path)
+
+    final_output_path = os.path.join(output_dir, f"{base_name}.{output_format}") if output_dir else md_path.replace(".md", f".{output_format}")
+    print(f"Final output path: {final_output_path}")
     # Convert to HTML content
     html_content = markdown.markdown(
         markdown_text,
         extensions=['md_in_html', 'fenced_code', 'codehilite', 'toc', 'attr_list']
     )
     html_content = modify_classes(html_content)
+
+    if use_cdn:
+        html_block = """
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+                onload="renderMathInElement(document.body);"></script>
+        """
+    else:
+        html_block = f'''<script type="text/javascript" id="MathJax-script" async src="{Path(setup_mathjax()).as_uri()}"></script>
+        <link href="{Path(setup_tailwind()).as_uri()}" rel="stylesheet">
+        custom_css = f'<link rel="stylesheet" href="{Path(setup_custom_css()).as_uri()}" />
+        '''
 
     # Inject into template
     html_template = f"""
@@ -112,9 +136,13 @@ def convert_markdown(md_path, output_dir="", output_format="pdf"):
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>{base_name}</title>
+
             <link href="{Path(setup_tailwind()).as_uri()}" rel="stylesheet">
-            <script type="text/javascript" id="MathJax-script" async src="{Path(setup_mathjax()).as_uri()}"></script>
+
+    
             <link rel="stylesheet" href="{Path(setup_custom_css()).as_uri()}" />
+            {html_block}
+            
         </head>
         <body for="html-export" class="min-h-screen flex flex-col justify-between">
             <main class="flex-1">
@@ -132,18 +160,13 @@ def convert_markdown(md_path, output_dir="", output_format="pdf"):
 
     # If output format is .html, copy to output directory
     if output_format == "html":
-        if output_dir:
-            setup_directory(output_dir)
-            shutil.copy(temp_html_path, final_output_path)
-        else:
-            shutil.copy(temp_html_path, final_output_path)
+        setup_directory(output_dir)
+        shutil.copy(temp_html_path, final_output_path)
 
     # If output format is .pdf, delegate to PDF converter
     elif output_format == "pdf":
-        if output_dir:
-            setup_directory(output_dir)
-        # Here, you'd use `temp_html_path` for PDF conversion
-        # and save the PDF to `final_output_path`
-        pass  # Replace with PDF conversion logic
-
+        setup_directory(output_dir)
+        ensure_playwright_installed()
+        html_to_pdf_with_playwright(temp_html_path, final_output_path)
+            
     return final_output_path  # Optional: return for chaining or logging
