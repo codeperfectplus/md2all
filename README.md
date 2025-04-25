@@ -55,6 +55,12 @@ sudo dnf install -y \
 pip install md2all
 ```
 
+## Screenshots
+
+> Check the test_data for the example mardown file and the output HTML and Pdf files.
+
+![Screenshot](test_data/screenshot.png)
+
 
 ## Upcoming Features
 
@@ -79,7 +85,11 @@ Convert a Markdown (`.md`) file into a styled HTML file with TailwindCSS and Mat
 ### 🔧 Function Signature
 
 ```python
-convert_markdown(md_path: str, output_dir: str = "", output_format: str = "pdf") -> str
+convert_markdown(md_path: str, output_dir="output", output_format="pdf")
+```
+
+```python
+convert_markdown(md_path: str, output_dir="output", output_format="html")
 ```
 
 ---
@@ -115,7 +125,7 @@ convert_markdown(md_path: str, output_dir: str = "", output_format: str = "pdf")
 from md2all import convert_markdown
 
 # Convert a Markdown file to HTML
-output_file = convert_markdown("notes/my_math_notes.md", output_dir="output", output_format="html")
+output_file = convert_markdown("notes/my_notes.md", output_dir="output", output_format="html")
 
 print("File saved to:", output_file)
 ```
@@ -132,3 +142,7 @@ print("File saved to:", output_file)
 ## Author 
 
 - Deepak Raj
+
+## Why Md2all?
+
+- I created this library to simplify the process of converting Markdown files into styled HTML/PDF documents for the system which doesn't have access to CDN/Internet. So, I made it a standalone library that can be used in any environment without the need for external resources.
