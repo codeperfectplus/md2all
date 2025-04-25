@@ -1,5 +1,5 @@
-from md2all.md_to_html import transform
+from md2all.md_to_html import convert_markdown
 
 __all__ = [
-    "transform",
+    "convert_markdown",
 ]

@@ -48,8 +48,6 @@ def setup_tailwind():
     dst_path = copy_file(source_tailwind_path)
     return dst_path
 
-from bs4 import BeautifulSoup
-
 def modify_classes(html_content):
     """Modify HTML content by injecting Tailwind classes into elements using BeautifulSoup."""
     soup = BeautifulSoup(html_content, 'html.parser')
@@ -86,12 +84,7 @@ def read_markdown_file(file_path):
     with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
         return f.read()
 
-import os
-import shutil
-from pathlib import Path
-import markdown
-
-def transform(md_path, output_dir="", output_format="pdf"):
+def convert_markdown(md_path, output_dir="", output_format="pdf"):
     """Convert Markdown to HTML (optionally PDF), save results in appropriate location."""
     # get full path if not absolute
     if not os.path.isabs(md_path):
@@ -138,7 +131,7 @@ def transform(md_path, output_dir="", output_format="pdf"):
         f.write(html_template)
 
     # If output format is .html, copy to output directory
-    if output_format == ".html":
+    if output_format == "html":
         if output_dir:
             setup_directory(output_dir)
             shutil.copy(temp_html_path, final_output_path)
@@ -146,7 +139,7 @@ def transform(md_path, output_dir="", output_format="pdf"):
             shutil.copy(temp_html_path, final_output_path)
 
     # If output format is .pdf, delegate to PDF converter
-    elif output_format == ".pdf":
+    elif output_format == "pdf":
         if output_dir:
             setup_directory(output_dir)
         # Here, you'd use `temp_html_path` for PDF conversion
