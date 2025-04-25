@@ -37,8 +37,6 @@ sudo apt install -y \
     libgstreamer-plugins-base1.0-dev
 ```
 
----
-
 #### 🛠️ For **CentOS/RHEL/Fedora**:
 
 ```bash
