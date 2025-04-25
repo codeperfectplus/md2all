@@ -6,8 +6,6 @@ from pathlib import Path
 from bs4 import BeautifulSoup
 
 ROOT_DIR = Path(__file__).resolve().parent
-print("Root Directory:", ROOT_DIR)
-# Get full path to user's home and centralized .lib directory
 home_dir = os.path.expanduser("~")
 lib_dir = os.path.join(home_dir, ".lib")
 
@@ -88,43 +86,44 @@ def read_markdown_file(file_path):
     with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
         return f.read()
 
-def transform(md_path, output_dir="", output_format=""):
-    """Convert Markdown text to HTML with Tailwind CSS classes and MathJax setup."""
-    print("Processing Markdown file:", md_path)
+import os
+import shutil
+from pathlib import Path
+import markdown
+
+def transform(md_path, output_dir="", output_format="pdf"):
+    """Convert Markdown to HTML (optionally PDF), save results in appropriate location."""
+    # get full path if not absolute
+    if not os.path.isabs(md_path):
+        md_path = os.path.abspath(md_path)
     markdown_text = read_markdown_file(md_path)
     markdown_text = convert_latex_format(markdown_text)
 
-    if output_dir:
-        setup_directory(output_dir)
-        output_dir = os.path.join(output_dir, os.path.basename(md_path).replace(".md", f".{output_format}"))
-    else:
-        output_dir = md_path.replace(".md", f".{output_format}")
+    # Prepare file names and paths
+    base_name = os.path.basename(md_path).replace(".md", "")
+    temp_html_path = os.path.join("/tmp", f"{base_name}.html")
+    final_output_path = os.path.join(output_dir, f"{base_name}.{output_format}") if output_dir else md_path.replace(".md", f".{output_format}")
 
-    html_content = markdown.markdown(markdown_text, extensions=['md_in_html', 'fenced_code', 'codehilite', 'toc', 'attr_list'])
+    # Convert to HTML content
+    html_content = markdown.markdown(
+        markdown_text,
+        extensions=['md_in_html', 'fenced_code', 'codehilite', 'toc', 'attr_list']
+    )
     html_content = modify_classes(html_content)
-    
-    html_template = """
+
+    # Inject into template
+    html_template = f"""
     <!DOCTYPE html>
     <html lang="en" class="scroll-smooth bg-gray-50 text-gray-900 antialiased">
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-            <title>{title}</title>
-
-            <!-- Tailwind CSS -->
-            <link href="{centralized_tailwind_path}" rel="stylesheet">
-
-            <!-- MathJax -->
-            <script type="text/javascript" id="MathJax-script" async
-                src="{centralized_mathjax_path}"></script>
-
-            <!-- Custom CSS -->
-            <link rel="stylesheet" href="{centralized_css_path}" />
+            <title>{base_name}</title>
+            <link href="{Path(setup_tailwind()).as_uri()}" rel="stylesheet">
+            <script type="text/javascript" id="MathJax-script" async src="{Path(setup_mathjax()).as_uri()}"></script>
+            <link rel="stylesheet" href="{Path(setup_custom_css()).as_uri()}" />
         </head>
         <body for="html-export" class="min-h-screen flex flex-col justify-between">
-
-            <!-- Main content -->
             <main class="flex-1">
                 <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 prose prose-lg prose-slate">
                     {html_content}
@@ -133,13 +132,25 @@ def transform(md_path, output_dir="", output_format=""):
         </body>
     </html>
     """
-    
-    html_template = html_template.replace("{title}", "Markdown to HTML Conversion")
-    html_template = html_template.replace("{html_content}", html_content)
-    html_template = html_template.replace("{centralized_mathjax_path}", Path(setup_mathjax()).as_uri())
-    html_template = html_template.replace("{centralized_css_path}", Path(setup_custom_css()).as_uri())
-    html_template = html_template.replace("{centralized_tailwind_path}", Path(setup_tailwind()).as_uri())
 
-    
-    with open(output_dir, "w", encoding="utf-8") as f:
+    # Save temporary HTML to /tmp
+    with open(temp_html_path, "w", encoding="utf-8") as f:
         f.write(html_template)
+
+    # If output format is .html, copy to output directory
+    if output_format == ".html":
+        if output_dir:
+            setup_directory(output_dir)
+            shutil.copy(temp_html_path, final_output_path)
+        else:
+            shutil.copy(temp_html_path, final_output_path)
+
+    # If output format is .pdf, delegate to PDF converter
+    elif output_format == ".pdf":
+        if output_dir:
+            setup_directory(output_dir)
+        # Here, you'd use `temp_html_path` for PDF conversion
+        # and save the PDF to `final_output_path`
+        pass  # Replace with PDF conversion logic
+
+    return final_output_path  # Optional: return for chaining or logging

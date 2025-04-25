@@ -11,24 +11,24 @@ with open("requirements.txt", "r", encoding="utf-8") as fh:
 
 # Setting up the package
 setuptools.setup(
-    name="mdconvertor-tools",
-    version="0.0.5",
+    name="md2all",
+    version="0.0.2",
     author="Deepak Raj",
     author_email="deepak008@live.com",
     description="convertor is a simple and easy to use library for converting markdown files to various formats.",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/codeperfectplus/mdconvertor-tools",
-    data_files=[('assets', glob('mdconvertor_tools/libs/*'))],
+    url="https://github.com/codeperfectplus/md2all",
+    data_files=[('assets', glob('md2all/libs/*'))],
     keywords=[
 
     ],
     install_requires=requirements,
     packages=setuptools.find_packages(),
     project_urls={
-        "Documentation": "https://mdconvertor-tools.readthedocs.io/en/latest/",
-        "Source": "https://github.com/codeperfectplus/mdconvertor-tools",
-        "Tracker": "https://github.com/codeperfectplus/mdconvertor-tools/issues"
+        "Documentation": "https://md2all.readthedocs.io/en/latest/",
+        "Source": "https://github.com/codeperfectplus/md2all",
+        "Tracker": "https://github.com/codeperfectplus/md2all/issues"
     },
     classifiers=[
         "Development Status :: 5 - Production/Stable",

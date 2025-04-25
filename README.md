@@ -1,12 +1,12 @@
-# 📝 Mdconvertor Tools
+# 📝 md2all
 
 A minimal Python package to convert Markdown files to clean, responsive **HTML** with **Tailwind CSS**, **MathJax**, and beautiful typography.
 
 > Ideal for note-taking, documentation, and publishing markdown content as styled web pages.
 
-![PyPI](https://img.shields.io/pypi/v/mdconvertor-tools)
-![Python Version](https://img.shields.io/pypi/pyversions/mdconvertor-tools)
-![License](https://img.shields.io/github/license/codeperfectplus/mdconvertor-tools)
+![PyPI](https://img.shields.io/pypi/v/md2all)
+![Python Version](https://img.shields.io/pypi/pyversions/md2all)
+![License](https://img.shields.io/github/license/codeperfectplus/md2all)
 
 ---
 
@@ -23,7 +23,7 @@ A minimal Python package to convert Markdown files to clean, responsive **HTML**
 ## 📦 Installation
 
 ```bash
-pip install mdconvertor-tools
+pip install md2all
 ```
 
 
