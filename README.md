@@ -61,15 +61,6 @@ pip install md2all
 
 ![Screenshot](test_data/screenshot.png)
 
-
-## Upcoming Features
-
-- 📜 Support for custom CSS
-- Support for PDF generation
-- Support for custom themes
-- Support for custom fonts
-
-
 ## How to Use it
 
 Sure! Here's a concise and developer-friendly **documentation** for using the `convert_markdown` function as part of your Python library (assuming it's installed from PyPI):
@@ -79,18 +70,6 @@ Sure! Here's a concise and developer-friendly **documentation** for using the `c
 ## 📄 `convert_markdown`
 
 Convert a Markdown (`.md`) file into a styled HTML file with TailwindCSS and MathJax support.
-
----
-
-### 🔧 Function Signature
-
-```python
-convert_markdown(md_path: str, output_dir="output", output_format="pdf")
-```
-
-```python
-convert_markdown(md_path: str, output_dir="output", output_format="html")
-```
 
 ---
 
@@ -109,8 +88,8 @@ convert_markdown(md_path: str, output_dir="output", output_format="html")
 |-----------------|--------|-----------------------------------------------------------------------------|
 | `md_path`       | str    | Path to the input Markdown file. Can be relative or absolute.               |
 | `output_dir`    | str    | *(Optional)* Directory to save the converted file. Defaults to input file's directory. |
-| `output_format` | str    | *(Optional)* Set to `"html"` to output HTML. Default is `"pdf"`, but PDF is not implemented yet. |
-
+| `output_format` | str    | *(Optional)* Set to `"html"` to output HTML. Default is `"pdf"` |
+| `use_cdn`   | bool   | *(Optional)* If `True`, uses CDN else use offline resources. Default is `False`.(Useful in case your system deosn't have access to internet) |
 ---
 
 ### 📤 Returns
@@ -121,14 +100,40 @@ convert_markdown(md_path: str, output_dir="output", output_format="html")
 
 ### 🧪 Example Usage
 
+#### Sync Code(Good for general usage)
+
 ```python
 from md2all import convert_markdown
 
-# Convert a Markdown file to HTML
-output_file = convert_markdown("notes/my_notes.md", output_dir="output", output_format="html")
+md_path = "test_data/test.md"
+convert_markdown(md_path, output_format="html")
 
-print("File saved to:", output_file)
+
+md_path = "test_data/test.md"
+convert_markdown(md_path, output_format="pdf")
 ```
+
+#### Async Code(Good for large number of files and API usage)
+
+```python
+import asyncio
+
+from md2all import convert_markdown
+
+md_path = "test_data/test.md"
+
+async def convert_to_html():
+    """ Convert Markdown to HTML. """
+    await convert_markdown(md_path, output_format="html")
+
+async def convert_to_pdf():
+    """ Convert Markdown to PDF. """
+    await convert_markdown(md_path, output_format="pdf")
+
+asyncio.run(convert_to_html())
+asyncio.run(convert_to_pdf())
+```
+
 
 ---
 
