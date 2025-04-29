@@ -1,4 +1,4 @@
-bs4
-markdown
-playwright
-asyncio
+beautifulsoup4==4.13.4
+markdown==3.8
+playwright==1.51.0
+asyncio==3.4.3

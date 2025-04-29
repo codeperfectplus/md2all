@@ -39,4 +39,9 @@ setuptools.setup(
     ],
     python_requires=">=3.6",
     include_package_data=True,
+    entry_points={
+        "console_scripts": [
+            "md2all=md2all.cli:main",  # Update path as needed
+        ],
+    },
 )

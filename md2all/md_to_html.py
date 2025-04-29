@@ -110,7 +110,7 @@ async def convert_markdown_async(md_path: str, output_dir: str = "", output_form
     # Convert to HTML content
     html_content = markdown.markdown(
         markdown_text,
-        extensions=['md_in_html', 'fenced_code', 'codehilite', 'toc', 'attr_list']
+        extensions=['md_in_html', 'fenced_code', 'codehilite', 'toc', 'attr_list', 'tables']
     )
     html_content = await modify_classes(html_content)
 
