@@ -67,10 +67,10 @@ async def modify_classes(html_content):
 
     for tag, tailwind_classes in tag_class_map.items():
         for element in soup.find_all(tag):
-            existing_classes = element.get("class", [])
+            existing_classes = element.get("class", []) # type: ignore
             new_classes = tailwind_classes.split()
-            combined_classes = list(set(existing_classes + new_classes))
-            element['class'] = combined_classes
+            combined_classes = list(set(existing_classes + new_classes)) # type: ignore
+            element['class'] = combined_classes # type: ignore
 
     return str(soup)
 
@@ -123,9 +123,9 @@ async def convert_markdown_async(md_path: str, output_dir: str = "", output_form
                 onload="renderMathInElement(document.body);"></script>
         """
     else:
-        html_block = f'''<script type="text/javascript" id="MathJax-script" async src="{Path(await setup_mathjax()).as_uri()}"></script>
-        <link href="{Path(await setup_tailwind()).as_uri()}" rel="stylesheet">
-        <link rel="stylesheet" href="{Path(await setup_custom_css()).as_uri()}" />
+        html_block = f'''<script type="text/javascript" id="MathJax-script" async src="{Path(await setup_mathjax()).resolve().as_uri()}"></script>
+        <link href="{Path(await setup_tailwind()).resolve().as_uri()}" rel="stylesheet">
+        <link rel="stylesheet" href="{Path(await setup_custom_css()).resolve().as_uri()}" />
         '''
 
     # Inject into template
@@ -136,8 +136,8 @@ async def convert_markdown_async(md_path: str, output_dir: str = "", output_form
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>{base_name}</title>
-            <link href="{Path(await setup_tailwind()).as_uri()}" rel="stylesheet">
-            <link rel="stylesheet" href="{Path(await setup_custom_css()).as_uri()}" />
+            <link href="{Path(await setup_tailwind()).resolve().as_uri()}" rel="stylesheet">
+            <link rel="stylesheet" href="{Path(await setup_custom_css()).resolve().as_uri()}" />
             {html_block}
         </head>
         <body for="html-export" class="min-h-screen flex flex-col justify-between">

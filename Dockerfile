@@ -25,4 +25,4 @@ RUN pip install --no-cache-dir playwright md2all && \
     playwright install --with-deps chromium
 
 # FAKE ENTRYPOINT
-ENTRYPOINT ["tail", "-f", "/dev/null"]
+ENTRYPOINT ["python", "example.py"]
