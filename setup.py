@@ -12,7 +12,7 @@ with open("requirements.txt", "r", encoding="utf-8") as fh:
 # Setting up the package
 setuptools.setup(
     name="md2all",
-    version="0.0.9",
+    version="0.0.10",
     author="Deepak Raj",
     author_email="deepak008@live.com",
     description="convertor is a simple and easy to use library for converting markdown files to various formats.",

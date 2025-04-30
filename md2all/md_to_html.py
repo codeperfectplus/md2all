@@ -9,8 +9,7 @@ import aiofiles
 from md2all.utils import html_to_pdf_with_playwright, ensure_playwright_installed
 
 ROOT_DIR = Path(__file__).resolve().parent
-actual_user = os.environ.get("SUDO_USER") or os.environ.get("USER")
-home_dir = os.path.expanduser(f"~{actual_user}")
+home_dir = os.path.expanduser("~")
 lib_dir = os.path.join(home_dir, ".lib")
 
 source_mathjax_js = os.path.join(ROOT_DIR, "libs", "tex-mml-chtml.js")
