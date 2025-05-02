@@ -1,47 +1,62 @@
-import setuptools
-from glob import glob
+from setuptools import setup, find_packages
 
-# Reading the long description from the README file
+# Read the long description from README.md
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
-# Reading the list of requirements from the requirements file
+# Read the list of requirements from requirements.txt
 with open("requirements.txt", "r", encoding="utf-8") as fh:
     requirements = fh.read().splitlines()
 
-# Setting up the package
-setuptools.setup(
-    name="md2all",
-    version="0.0.10",
+setup(
+    name="md2htmlify",
+    version="0.0.1",
     author="Deepak Raj",
     author_email="deepak008@live.com",
-    description="convertor is a simple and easy to use library for converting markdown files to various formats.",
+    description=(
+        "A simple, user-friendly library for converting Markdown files to HTML, "
+        "with optional local or CDN-based math and styling dependencies."
+    ),
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/codeperfectplus/md2all",
-    data_files=[('assets', glob('md2all/libs/*'))],
-    keywords=[
-
-    ],
-    install_requires=requirements,
-    packages=setuptools.find_packages(),
-    project_urls={
-        "Documentation": "https://md2all.readthedocs.io/en/latest/",
-        "Source": "https://github.com/codeperfectplus/md2all",
-        "Tracker": "https://github.com/codeperfectplus/md2all/issues"
+    url="https://github.com/codeperfectplus/md2htmlify",
+    packages=find_packages(),
+    # Instead of using data_files, it's often preferable to use package_data
+    # or include_package_data to ensure files get included with the package itself.
+    # For any non-Python assets, place them in a package directory (e.g. md2htmlify/libs).
+    # Example usage: package_data={"md2htmlify": ["libs/*"]},
+    # or rely on MANIFEST.in to fine-tune inclusion.
+    include_package_data=True,
+    package_data={
+        "md2htmlify": ["libs/*"]  # Adjust the pattern as needed
     },
+    install_requires=requirements,
+    python_requires=">=3.6",
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: Apache Software License",
+        "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
         "Intended Audience :: Developers"
     ],
-    python_requires=">=3.6",
-    include_package_data=True,
+    project_urls={
+        "Documentation": "https://md2htmlify.readthedocs.io/en/latest/",
+        "Source": "https://github.com/codeperfectplus/md2htmlify",
+        "Tracker": "https://github.com/codeperfectplus/md2htmlify/issues"
+    },
     entry_points={
         "console_scripts": [
-            "md2all=md2all.cli:main",  # Update path as needed
+            "md2htmlify=md2htmlify.cli:main",  # Update path if needed
         ],
     },
+    keywords=[
+        "markdown",
+        "html",
+        "converter",
+        "mathjax",
+        "tailwind",
+        "latex",
+        "documentation",
+    ],
+    license="MIT",
 )
